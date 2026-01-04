@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Degeneracy Collapse Simulator</title>
+<style>
+body { font-family: sans-serif; }
+canvas { border: 1px solid #ccc; }
+</style>
+</head>
+<body>
+
+<h1>Degeneracy Collapse Simulator</h1>
+
+<p>
+The base objective has a degenerate ring of minima.
+An orthogonal constraint collapses the ring into a single stable solution.
+</p>
+
+<label>
+Constraint strength (alpha):
+<input type="range" min="0" max="0.5" step="0.01" id="alpha">
+</label>
+
+<canvas id="c" width="400" height="400"></canvas>
+
+<script>
+const canvas = document.getElementById("c");
+const ctx = canvas.getContext("2d");
+const slider = document.getElementById("alpha");
+
+function draw(alpha) {
+  ctx.clearRect(0,0,400,400);
+  for (let i = 0; i < 400; i++) {
+    for (let j = 0; j < 400; j++) {
+      let x = (i - 200) / 100;
+      let y = (j - 200) / 100;
+      let f = (x*x + y*y - 1)**2 + alpha * x*x;
+      let v = Math.min(255, Math.floor(f * 255));
+      ctx.fillStyle = `rgb(${v},${v},${v})`;
+      ctx.fillRect(i, j, 1, 1);
+    }
+  }
+}
+
+slider.oninput = e => draw(parseFloat(e.target.value));
+draw(0);
+</script>
+
+</body>
+</html>
